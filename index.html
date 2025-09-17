@@ -67,12 +67,12 @@ function stopTone(){
   gain.gain.setValueAtTime(gain.gain.value, now);
   gain.gain.linearRampToValueAtTime(0.00001, now + dec);
 
-  osc.stop(now + dec + 0.02);
-
-  setTimeout(()=>{
+  // вместо задержки: слушаем событие onended, чтобы гарантировать очистку вовремя
+  osc.stop(now + dec + 0.01);
+  osc.onended = ()=>{
     try{ osc.disconnect(); gain.disconnect(); }catch(e){}
     osc = null; gain = null; isPlaying = false; btn.setAttribute('aria-pressed','false');
-  }, (dec + 0.05) * 1000);
+  };
 }
 
 btn.addEventListener('pointerdown', (e)=>{
